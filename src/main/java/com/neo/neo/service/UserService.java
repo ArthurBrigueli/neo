@@ -1,14 +1,11 @@
 package com.neo.neo.service;
 
 
-import com.neo.neo.DTO.LoginRequest;
-import com.neo.neo.DTO.LoginResponse;
-import com.neo.neo.DTO.UserResponse;
+import com.neo.neo.DTO.response.LoginResponse;
+import com.neo.neo.DTO.response.UserResponse;
 import com.neo.neo.configSecurity.TokenService;
 import com.neo.neo.entity.User;
 import com.neo.neo.repository.UserRepository;
-import jakarta.validation.Valid;
-import org.apache.tomcat.util.buf.UEncoder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +23,16 @@ public class UserService {
         this.userRepository = userRepository;
         this.encoder = encoder;
         this.tokenService = tokenService;
+    }
+
+
+    public ResponseEntity deleteUser(Long id){
+        Optional<User> optinalUser = userRepository.findById(id);
+        if(optinalUser.isPresent()){
+            userRepository.deleteById(id);
+            return ResponseEntity.ok().body("Usuario deletado com sucesso");
+        }
+        return ResponseEntity.badRequest().body("Usuario nao encontrado");
     }
 
 

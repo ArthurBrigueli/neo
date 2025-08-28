@@ -1,4 +1,4 @@
-package com.neo.neo.DTO;
+package com.neo.neo.DTO.response;
 
 public record UserResponse(
         Long id,

@@ -1,4 +1,4 @@
-package com.neo.neo.DTO;
+package com.neo.neo.DTO.request;
 
 public record LoginRequest(
         String name,
