@@ -45,10 +45,21 @@ public class UserService {
 
 
     public ResponseEntity<String> createUser( User user){
-        Optional<User> optUser = userRepository.findByEmail(user.getEmail());
-        if(optUser.isPresent()){
-            return ResponseEntity.badRequest().body("Email já cadastrado");
+
+        if(userRepository.findByEmail(user.getEmail()).isPresent()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Email já cadastrado");
         }
+
+        if(userRepository.findByCpf(user.getCpf()).isPresent()){
+            return ResponseEntity
+                    .badRequest()
+                    .body("Cpf já cadastrado");
+        }
+
+
+
         user.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(user);
         return ResponseEntity.ok().body("Usuario criado com sucesso");
