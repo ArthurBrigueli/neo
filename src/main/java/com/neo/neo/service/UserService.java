@@ -76,9 +76,17 @@ public class UserService {
     }
 
 
-    public Page<User> getAllUser(int page, int size, Specification<User> specification){
+    public Page<UserResponse> getAllUser(int page, int size, Specification<User> specification){
         PageRequest pageRequest = PageRequest.of(page, size);
-        return userRepository.findAll(specification, pageRequest);
+        return userRepository.findAll(specification, pageRequest)
+                .map(user -> new UserResponse(
+                        user.getId(),
+                        user.getName(),
+                        user.getEmail(),
+                        user.getCpf(),
+                        user.getDateOfBirth(),
+                        user.getAge()
+                ));
     }
 
 

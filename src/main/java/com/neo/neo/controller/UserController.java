@@ -2,6 +2,7 @@ package com.neo.neo.controller;
 
 import com.neo.neo.DTO.request.LoginRequest;
 import com.neo.neo.DTO.request.UpdateUserRequest;
+import com.neo.neo.DTO.response.UserResponse;
 import com.neo.neo.entity.User;
 import com.neo.neo.service.UserService;
 import com.neo.neo.specifications.UserSpecifications;
@@ -40,7 +41,7 @@ public class UserController {
 
 
     @GetMapping("/auth/users")
-    public Page<User> getUsers(@RequestParam(required = false) String email, @RequestParam(required = false) String name, @RequestParam(required = false) String cpf, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+    public Page<UserResponse> getUsers(@RequestParam(required = false) String email, @RequestParam(required = false) String name, @RequestParam(required = false) String cpf, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
         Specification<User> spec = UserSpecifications.nameContains(name)
                 .and(UserSpecifications.cpfContains(cpf))
                 .and(UserSpecifications.emailContains(email));
