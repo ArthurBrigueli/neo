@@ -9,6 +9,7 @@ import com.neo.neo.entity.User;
 import com.neo.neo.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -75,9 +76,9 @@ public class UserService {
     }
 
 
-    public Page<User> getAllUser(int page, int size){
+    public Page<User> getAllUser(int page, int size, Specification<User> specification){
         PageRequest pageRequest = PageRequest.of(page, size);
-        return userRepository.findAll(pageRequest);
+        return userRepository.findAll(specification, pageRequest);
     }
 
 
