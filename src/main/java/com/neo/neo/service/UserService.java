@@ -6,6 +6,8 @@ import com.neo.neo.DTO.response.UserResponse;
 import com.neo.neo.configSecurity.TokenService;
 import com.neo.neo.entity.User;
 import com.neo.neo.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,12 @@ public class UserService {
             return ResponseEntity.ok().body("Usuario deletado com sucesso");
         }
         return ResponseEntity.badRequest().body("Usuario nao encontrado");
+    }
+
+
+    public Page<User> getAllUser(int page, int size){
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return userRepository.findAll(pageRequest);
     }
 
 

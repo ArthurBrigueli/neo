@@ -4,6 +4,7 @@ import com.neo.neo.DTO.request.LoginRequest;
 import com.neo.neo.entity.User;
 import com.neo.neo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,12 @@ public class UserController {
     @DeleteMapping("/auth/delete/{id}")
     public ResponseEntity deleteUser(@PathVariable Long id){
         return userService.deleteUser(id);
+    }
+
+
+    @GetMapping("/auth/users")
+    public Page<User> getUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+        return userService.getAllUser(page, size);
     }
 
 
