@@ -1,6 +1,7 @@
 package com.neo.neo.service;
 
 
+import com.neo.neo.DTO.request.UpdateUserRequest;
 import com.neo.neo.DTO.response.LoginResponse;
 import com.neo.neo.DTO.response.UserResponse;
 import com.neo.neo.configSecurity.TokenService;
@@ -26,6 +27,42 @@ public class UserService {
         this.encoder = encoder;
         this.tokenService = tokenService;
     }
+
+    public ResponseEntity updateUser(Long id, UpdateUserRequest updateUserRequest){
+        return userRepository.findById(id)
+                .map(user -> {
+                    if(updateUserRequest.email() != null){
+                        userRepository.findByEmail(updateUserRequest.email())
+                                .filter(u -> !u.getId().equals(id))
+                                .ifPresent(u -> { throw new RuntimeException("Email já cadastrado"); });
+                        user.setEmail(updateUserRequest.email());
+                    }
+
+                    if(updateUserRequest.cpf() != null) {
+                        userRepository.findByCpf(updateUserRequest.cpf())
+                                .filter(u -> !u.getId().equals(id))
+                                .ifPresent(u -> { throw new RuntimeException("CPF já cadastrado"); });
+                        user.setCpf(updateUserRequest.cpf());
+                    }
+
+                    if(updateUserRequest.name() != null){
+                        user.setName(updateUserRequest.name());
+                    }
+
+                    if(updateUserRequest.dateOfBirth() != null){
+                        user.setDateOfBirth(updateUserRequest.dateOfBirth());
+                    }
+
+                    if(updateUserRequest.password() != null && !updateUserRequest.password().isEmpty()){
+                        user.setPassword(encoder.encode(updateUserRequest.password()));
+                    }
+
+                    userRepository.save(user);
+                    return ResponseEntity.ok().body("Usuario Atualizado com sucesso");
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 
 
     public ResponseEntity deleteUser(Long id){

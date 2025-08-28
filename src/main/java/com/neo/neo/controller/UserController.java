@@ -1,6 +1,7 @@
 package com.neo.neo.controller;
 
 import com.neo.neo.DTO.request.LoginRequest;
+import com.neo.neo.DTO.request.UpdateUserRequest;
 import com.neo.neo.entity.User;
 import com.neo.neo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,12 @@ public class UserController {
     @GetMapping("/auth/users")
     public Page<User> getUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
         return userService.getAllUser(page, size);
+    }
+
+
+    @PutMapping("/auth/update/user/{id}")
+    public ResponseEntity updateUser(@PathVariable Long id, @RequestBody UpdateUserRequest updateUserRequest){
+        return userService.updateUser(id, updateUserRequest);
     }
 
 
