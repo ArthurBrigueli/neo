@@ -67,13 +67,14 @@ public class UserService {
 
 
 
-    public ResponseEntity deleteUser(Long id){
+    public void deleteUser(Long id){
         Optional<User> optinalUser = userRepository.findById(id);
         if(optinalUser.isPresent()){
             userRepository.deleteById(id);
-            return ResponseEntity.ok().body("Usuario deletado com sucesso");
+        }else{
+            throw new IllegalArgumentException("Usuario nao encontrado");
         }
-        return ResponseEntity.badRequest().body("Usuario nao encontrado");
+
     }
 
 

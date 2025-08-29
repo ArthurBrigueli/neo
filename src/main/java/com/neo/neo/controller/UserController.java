@@ -54,12 +54,16 @@ public class UserController {
     }
 
 
-    @Operation(
-            summary = "Deletar usuario apartir do ID (Bearer necessario)"
-    )
+    @Operation(summary = "Deletar usuario apartir do ID (Bearer necessario)")
     @DeleteMapping("/auth/delete/{id}")
-    public ResponseEntity deleteUser(@PathVariable Long id){
-        return userService.deleteUser(id);
+    public ResponseEntity<?> deleteUser(@PathVariable Long id){
+        try{
+            userService.deleteUser(id);
+            return ResponseEntity.ok("Usuario deletado com sucesso");
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
 

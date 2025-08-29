@@ -156,6 +156,34 @@ public class UserServiceTest {
     }
 
 
+    @Test
+    public void deleteUserSuccess(){
+        User user = new User();
+        user.setId(1L);
+        user.setName("arthur");
+
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        userService.deleteUser(user.getId());
+
+        verify(userRepository, times(1)).deleteById(user.getId());
+
+    }
+    
+    @Test
+    public void deleteUserNotFound(){
+
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+        RuntimeException exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.deleteUser(1L);
+        });
+
+        assertEquals("Usuario nao encontrado", exception.getMessage());
+
+        verify(userRepository, never()).deleteById(anyLong());
+
+    }
+
+
 
 
 
