@@ -1,6 +1,7 @@
 package com.neo.neo.service;
 
 
+import com.neo.neo.DTO.request.CreateUserRequest;
 import com.neo.neo.DTO.request.UpdateUserRequest;
 import com.neo.neo.DTO.response.LoginResponse;
 import com.neo.neo.DTO.response.UserResponse;
@@ -90,25 +91,30 @@ public class UserService {
     }
 
 
-    public ResponseEntity<String> createUser( User user){
+    public ResponseEntity<String> createUser(CreateUserRequest request) {
 
-        if(userRepository.findByEmail(user.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(request.email()).isPresent()) {
             return ResponseEntity
                     .badRequest()
                     .body("Email já cadastrado");
         }
 
-        if(userRepository.findByCpf(user.getCpf()).isPresent()){
+        if (userRepository.findByCpf(request.cpf()).isPresent()) {
             return ResponseEntity
                     .badRequest()
                     .body("Cpf já cadastrado");
         }
 
+        User user = new User();
+        user.setName(request.name());
+        user.setCpf(request.cpf());
+        user.setEmail(request.email());
+        user.setDateOfBirth(request.dateOfBirth());
+        user.setPassword(encoder.encode(request.password()));
 
-
-        user.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(user);
-        return ResponseEntity.ok().body("Usuario criado com sucesso");
+
+        return ResponseEntity.ok().body("Usuário criado com sucesso");
     }
 
 
