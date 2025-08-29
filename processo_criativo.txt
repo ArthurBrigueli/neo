@@ -1,0 +1,62 @@
+Objetivo:
+
+Desenvolver uma API REST para cadastro, atualização, listagem e exclusão de clientes pessoa física, incluindo paginação,
+filtros e cálculo da idade a partir da data de nascimento, conforme solicitado no desafio da NeoApp.
+
+
+Estrutura do Projeto
+
+    Segui o padrão MVC
+
+    Controller: endpoints da API.
+
+    Service: lógica de negócio e cálculo da idade.
+
+    Repository: acesso ao banco com Spring Data JPA.
+
+    DTOs: controle de dados expostos na API.
+
+    A organização visa facilidade de manutenção e separação de responsabilidades.
+
+
+Design da API
+
+Endpoints principais:
+
+    POST /api/login - logar no sistema
+
+    POST /api/register – criar cliente.
+
+    GET /api/auth/users – listar clientes com paginação e filtros por nome, CPF e e-mail.
+
+    PUT /api/auth/update/user/{id} – atualizar cliente.
+
+    DELETE /api/auth/delete/{id} – remover cliente.
+
+    Todas as respostas incluem a idade calculada.
+
+
+Segurança
+
+    Spring Security + JWT para autenticação.
+
+    Apenas usuários autenticados podem acessar a API.
+
+
+Testes
+
+    Cobertura de testes unitários serviços e endpoints principais.
+
+
+Decisões e Desafios
+
+    O cálculo da idade foi implementado no DTO, evitando poluir a entidade e facilitando testes.
+
+    Filtros por múltiplos atributos foram feitos usando Specifications do Spring Data JPA, permitindo consultas flexíveis sem criar queries complexas.
+
+    A documentação foi feita com Swagger, para facilitar visualização e testes da API.
+
+
+Melhorias Futuras
+
+    Implementação de controle de roles para diferentes níveis de acesso.
