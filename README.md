@@ -27,17 +27,6 @@ Para executar este projeto, você precisará ter instalado:
 
 1.  Crie um banco de dados PostgreSQL com o nome de sua preferência (ex: `neoapp_db`).
 2.  **Atualize o `pom.xml`:**
-    Remova a dependência do MySQL Connector e adicione a dependência do PostgreSQL:
-
-    **Remover (se existir):**
-    ```xml
-    <dependency>
-        <groupId>com.mysql</groupId>
-        <artifactId>mysql-connector-j</artifactId>
-        <scope>runtime</scope>
-    </dependency>
-    ```
-
     **Adicionar:**
     ```xml
     <dependency>
