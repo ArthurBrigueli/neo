@@ -80,12 +80,15 @@ public class UserController {
     }
 
 
-    @Operation(
-            summary = "Editar informaçoes do usuario apartir do ID (Bearer necessario)"
-    )
+    @Operation(summary = "Editar informaçoes do usuario apartir do ID (Bearer necessario)")
     @PutMapping("/auth/update/user/{id}")
-    public ResponseEntity updateUser(@PathVariable Long id, @RequestBody UpdateUserRequest updateUserRequest){
-        return userService.updateUser(id, updateUserRequest);
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UpdateUserRequest updateUserRequest){
+        try{
+            userService.updateUser(id, updateUserRequest);
+            return ResponseEntity.ok("Usuario atualizado com sucesso");
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 

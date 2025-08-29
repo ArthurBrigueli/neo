@@ -3,6 +3,7 @@ package com.neo.neo.service;
 
 import com.neo.neo.DTO.request.CreateUserRequest;
 import com.neo.neo.DTO.request.LoginRequest;
+import com.neo.neo.DTO.request.UpdateUserRequest;
 import com.neo.neo.DTO.response.LoginResponse;
 import com.neo.neo.configSecurity.TokenService;
 import com.neo.neo.entity.User;
@@ -15,6 +16,7 @@ import org.mockito.Mock;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -168,7 +170,7 @@ public class UserServiceTest {
         verify(userRepository, times(1)).deleteById(user.getId());
 
     }
-    
+
     @Test
     public void deleteUserNotFound(){
 
@@ -182,6 +184,115 @@ public class UserServiceTest {
         verify(userRepository, never()).deleteById(anyLong());
 
     }
+
+
+    @Test
+    public void updateUserSuccess() {
+        User user = new User();
+        user.setId(1L);
+        user.setName("arthur");
+        user.setCpf("123.123.123-32");
+        user.setEmail("arthur@gmail.com");
+        user.setPassword("arthur");
+        user.setDateOfBirth("18/02/2004");
+
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        when(userRepository.findByEmail("novo@email.com")).thenReturn(Optional.empty());
+        when(userRepository.findByCpf("987.654.321-00")).thenReturn(Optional.empty());
+        when(encoder.encode("novaSenha")).thenReturn("senhaCodificada");
+
+        UpdateUserRequest request = new UpdateUserRequest(
+                "Novo Nome",
+                "987.654.321-00",
+                "novo@email.com",
+                "01/01/2000",
+                "novaSenha"
+        );
+
+        userService.updateUser(user.getId(), request);
+
+        verify(userRepository, times(1)).save(argThat(u ->
+                u.getName().equals("Novo Nome") &&
+                        u.getCpf().equals("987.654.321-00") &&
+                        u.getEmail().equals("novo@email.com") &&
+                        u.getDateOfBirth().equals("01/01/2000") &&
+                        u.getPassword().equals("senhaCodificada")
+        ));
+    }
+
+    @Test
+    public void UpdateUserNotFound() {
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        UpdateUserRequest request = new UpdateUserRequest(
+                "Nome",
+                "123.456.789-00",
+                "email@teste.com",
+                "01/01/2000",
+                "senha"
+        );
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            userService.updateUser(1L, request);
+        });
+    }
+
+
+    @Test
+    public void updateUserEmailAlreadyExists() {
+        User existingUser = new User();
+        existingUser.setId(2L); // outro usuário
+        existingUser.setEmail("email@teste.com");
+
+        User user = new User();
+        user.setId(1L);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userRepository.findByEmail("email@teste.com")).thenReturn(Optional.of(existingUser));
+
+        UpdateUserRequest request = new UpdateUserRequest(
+                null,
+                null,
+                "email@teste.com",
+                null,
+                null
+        );
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            userService.updateUser(1L, request);
+        });
+    }
+
+
+
+    @Test
+    public void updateUserCpfAlreadyExists() {
+        User existingUser = new User();
+        existingUser.setId(2L); // outro usuário
+        existingUser.setCpf("123.456.789-00");
+
+        User user = new User();
+        user.setId(1L);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userRepository.findByCpf("123.456.789-00")).thenReturn(Optional.of(existingUser));
+
+        UpdateUserRequest request = new UpdateUserRequest(
+                null,
+                "123.456.789-00",
+                null,
+                null,
+                null
+        );
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            userService.updateUser(1L, request);
+        });
+    }
+
+
+
+
 
 
 

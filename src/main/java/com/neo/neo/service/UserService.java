@@ -30,39 +30,33 @@ public class UserService {
         this.tokenService = tokenService;
     }
 
-    public ResponseEntity updateUser(Long id, UpdateUserRequest updateUserRequest){
-        return userRepository.findById(id)
-                .map(user -> {
-                    if(updateUserRequest.email() != null){
-                        userRepository.findByEmail(updateUserRequest.email())
-                                .filter(u -> !u.getId().equals(id))
-                                .ifPresent(u -> { throw new RuntimeException("Email já cadastrado"); });
-                        user.setEmail(updateUserRequest.email());
-                    }
+    public void updateUser(Long id, UpdateUserRequest request){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario nao encontrado"));
 
-                    if(updateUserRequest.cpf() != null) {
-                        userRepository.findByCpf(updateUserRequest.cpf())
-                                .filter(u -> !u.getId().equals(id))
-                                .ifPresent(u -> { throw new RuntimeException("CPF já cadastrado"); });
-                        user.setCpf(updateUserRequest.cpf());
-                    }
+        if(request.email() != null){
+            userRepository.findByEmail(request.email())
+                    .filter(u -> !u.getId().equals(id))
+                    .ifPresent(u -> { throw new IllegalArgumentException("Email ja cadastrado"); });
+            user.setEmail(request.email());
+        }
 
-                    if(updateUserRequest.name() != null){
-                        user.setName(updateUserRequest.name());
-                    }
+        if(request.cpf() != null){
+            userRepository.findByCpf(request.cpf())
+                    .filter(u -> !u.getId().equals(id))
+                    .ifPresent(u -> { throw new IllegalArgumentException("CPF ja cadastrado"); });
+            user.setCpf(request.cpf());
+        }
 
-                    if(updateUserRequest.dateOfBirth() != null){
-                        user.setDateOfBirth(updateUserRequest.dateOfBirth());
-                    }
+        if(request.name() != null) user.setName(request.name());
 
-                    if(updateUserRequest.password() != null && !updateUserRequest.password().isEmpty()){
-                        user.setPassword(encoder.encode(updateUserRequest.password()));
-                    }
+        if(request.dateOfBirth() != null) user.setDateOfBirth(request.dateOfBirth());
 
-                    userRepository.save(user);
-                    return ResponseEntity.ok().body("Usuario Atualizado com sucesso");
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        if(request.password() != null && !request.password().isEmpty()){
+            user.setPassword(encoder.encode(request.password()));
+        }
+
+        userRepository.save(user);
     }
 
 
