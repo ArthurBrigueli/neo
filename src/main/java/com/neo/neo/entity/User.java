@@ -19,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
+@Table(name = "users")
 public class User {
 
     @Id
