@@ -2,6 +2,19 @@
 
 Este projeto implementa uma API REST para gerenciamento de clientes pessoa física, conforme o desafio proposto pela NeoApp.
 
+## Acesso à API Hospedada (VPS)
+
+A API está hospedada em uma VPS e pode ser acessada através da seguinte URL base:
+
+*   **URL Base da API:** [http://82.29.57.38:8085](http://82.29.57.38:8085)
+
+Para acessar a documentação interativa da API (Swagger UI) na VPS, utilize a seguinte URL:
+
+*   **Swagger UI:** [http://82.29.57.38:8085/swagger-ui/index.html](http://82.29.57.38:8085/swagger-ui/index.html)
+
+
+## Acesso à API local
+
 ## Pré-requisitos
 
 Para executar este projeto, você precisará ter instalado:
@@ -14,17 +27,6 @@ Para executar este projeto, você precisará ter instalado:
 
 1.  Crie um banco de dados PostgreSQL com o nome de sua preferência (ex: `neoapp_db`).
 2.  **Atualize o `pom.xml`:**
-    Remova a dependência do MySQL Connector e adicione a dependência do PostgreSQL:
-
-    **Remover (se existir):**
-    ```xml
-    <dependency>
-        <groupId>com.mysql</groupId>
-        <artifactId>mysql-connector-j</artifactId>
-        <scope>runtime</scope>
-    </dependency>
-    ```
-
     **Adicionar:**
     ```xml
     <dependency>
@@ -60,9 +62,9 @@ Para executar este projeto, você precisará ter instalado:
 
 A aplicação será iniciada na porta padrão 8080 (ou na porta configurada em `application.properties`).
 
-## Acesso à API e Documentação (Swagger UI)
+## Acesso à API e Documentação (Swagger UI) - Local
 
-Após iniciar a aplicação, você pode acessar a documentação interativa da API através do Swagger UI no seguinte endereço:
+Após iniciar a aplicação localmente, você pode acessar a documentação interativa da API através do Swagger UI no seguinte endereço:
 
 *   [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
@@ -79,6 +81,3 @@ Os principais endpoints da API são:
 ## Credenciais de Teste
 
 Não há credenciais de teste pré-definidas. Você pode registrar um novo usuário através do endpoint `/api/register` e então utilizar essas credenciais para realizar o login e obter um token JWT.
-
-
-
