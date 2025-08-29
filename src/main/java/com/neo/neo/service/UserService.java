@@ -91,18 +91,14 @@ public class UserService {
     }
 
 
-    public ResponseEntity<String> createUser(CreateUserRequest request) {
+    public void createUser(CreateUserRequest request) {
 
         if (userRepository.findByEmail(request.email()).isPresent()) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Email já cadastrado");
+            throw new IllegalArgumentException("Email ja cadastrado");
         }
 
         if (userRepository.findByCpf(request.cpf()).isPresent()) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Cpf já cadastrado");
+            throw  new IllegalArgumentException("Cpf ja cadastrado");
         }
 
         User user = new User();
@@ -114,7 +110,6 @@ public class UserService {
 
         userRepository.save(user);
 
-        return ResponseEntity.ok().body("Usuário criado com sucesso");
     }
 
 

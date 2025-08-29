@@ -29,11 +29,14 @@ public class UserController {
 
 
     @PostMapping("/register")
-    @Operation(
-            summary = "Registrar novo usuário"
-    )
+    @Operation(summary = "Registrar novo usuário")
     public ResponseEntity<String> registerUser(@RequestBody CreateUserRequest createUserRequest){
-        return userService.createUser(createUserRequest);
+        try{
+            userService.createUser(createUserRequest);
+            return ResponseEntity.ok("Usuario criado com sucesso");
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 
