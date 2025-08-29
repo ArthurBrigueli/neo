@@ -3,6 +3,7 @@ package com.neo.neo.controller;
 import com.neo.neo.DTO.request.CreateUserRequest;
 import com.neo.neo.DTO.request.LoginRequest;
 import com.neo.neo.DTO.request.UpdateUserRequest;
+import com.neo.neo.DTO.response.LoginResponse;
 import com.neo.neo.DTO.response.UserResponse;
 import com.neo.neo.entity.User;
 import com.neo.neo.service.UserService;
@@ -40,12 +41,16 @@ public class UserController {
     }
 
 
-    @Operation(
-            summary = "Login para receber o token jwt para acesso a endpoints privadas"
-    )
+    @Operation(summary = "Login para receber o token jwt para acesso a endpoints privadas")
     @PostMapping("/login")
-    public ResponseEntity loginUser(@RequestBody LoginRequest loginRequest){
-        return userService.loginUser(loginRequest.name(), loginRequest.password());
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest){
+        try{
+            LoginResponse response = userService.loginUser(loginRequest.name(), loginRequest.password());
+            return ResponseEntity.ok(response);
+        }catch(RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
 

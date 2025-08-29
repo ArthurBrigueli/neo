@@ -113,32 +113,29 @@ public class UserService {
     }
 
 
-    public ResponseEntity loginUser( String name, String password){
+    public LoginResponse loginUser( String name, String password){
 
         User user = this.userRepository.findByName(name)
                 .orElseThrow(() -> new RuntimeException("User Not found"));
 
 
-        if (encoder.matches(password, user.getPassword())) {
-            String token = tokenService.generateToken(user);
-
-            UserResponse userResponse = new UserResponse(
-                    user.getId(),
-                    user.getName(),
-                    user.getEmail(),
-                    user.getCpf(),
-                    user.getDateOfBirth(),
-                    user.getAge()
-            );
-
-            LoginResponse loginResponse = new LoginResponse(userResponse, token);
-
-            return ResponseEntity.ok(loginResponse);
+        if (!encoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Credenciais incorretas");
         }
 
-        return ResponseEntity
-                .badRequest()
-                .body("Credenciais incorreta");
+        String token = tokenService.generateToken(user);
+
+        UserResponse userResponse = new UserResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getCpf(),
+                user.getDateOfBirth(),
+                user.getAge()
+        );
+
+        return new LoginResponse(userResponse, token);
+
     }
 
 

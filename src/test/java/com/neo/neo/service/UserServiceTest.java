@@ -3,16 +3,19 @@ package com.neo.neo.service;
 
 import com.neo.neo.DTO.request.CreateUserRequest;
 import com.neo.neo.DTO.request.LoginRequest;
+import com.neo.neo.DTO.response.LoginResponse;
+import com.neo.neo.configSecurity.TokenService;
 import com.neo.neo.entity.User;
 import com.neo.neo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Optional;
 
@@ -23,6 +26,9 @@ public class UserServiceTest {
 
     @Mock
     private PasswordEncoder encoder;
+
+    @Mock
+    private TokenService tokenService;
 
     @InjectMocks
     private UserService userService;
@@ -84,7 +90,71 @@ public class UserServiceTest {
         verify(userRepository, never()).save(any(User.class));
 
     }
-    
+
+
+    @Test
+    public void loginSucess(){
+
+        User user = new User();
+
+        user.setId(1L);
+        user.setName("arthur");
+        user.setCpf("123.123.123-32");
+        user.setEmail("arthur@gmail.com");
+        user.setPassword("arthur");
+        user.setDateOfBirth("18/02/2004");
+
+        when(userRepository.findByName("arthur")).thenReturn(Optional.of(user));
+        when(encoder.matches("arthur", user.getPassword())).thenReturn(true);
+        when(tokenService.generateToken(user)).thenReturn("token123");
+
+        LoginResponse response = userService.loginUser("arthur", "arthur");
+
+        assertNotNull(response);
+        assertEquals("arthur", response.user().name());
+        assertEquals("token123", response.token());
+        verify(userRepository, times(1)).findByName("arthur");
+
+    }
+
+    @Test
+    public void loginErrorUserNotFound(){
+
+        when(userRepository.findByName("arthur")).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, ()->{
+            userService.loginUser("arthur", "arthur");
+        });
+
+        verify(userRepository, times(1)).findByName("arthur");
+
+    }
+
+    @Test
+    public void loginErrorPasswordIncorret(){
+        User user = new User();
+
+        user.setId(1L);
+        user.setName("arthur");
+        user.setCpf("123.123.123-32");
+        user.setEmail("arthur@gmail.com");
+        user.setPassword("arthur");
+        user.setDateOfBirth("18/02/2004");
+
+        when(userRepository.findByName("arthur")).thenReturn(Optional.of(user));
+
+        when(encoder.matches("arthur", user.getPassword())).thenReturn(false);
+
+        RuntimeException runtimeException = assertThrows(RuntimeException.class, () -> {
+            userService.loginUser("arthur", "arthur");
+        });
+
+        assertEquals("Credenciais incorretas", runtimeException.getMessage());
+
+        verify(userRepository, times(1)).findByName("arthur");
+
+    }
+
 
 
 
