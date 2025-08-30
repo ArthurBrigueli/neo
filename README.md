@@ -6,7 +6,7 @@ Este projeto implementa uma API REST para gerenciamento de clientes pessoa físi
 
 A API está hospedada em uma VPS e pode ser acessada através da seguinte URL base:
 
-*   **URL Base da API:** [http://82.29.57.38:8085](http://82.29.57.38:8085)
+*   **URL Base da API:** [https://neodesafio.net](https://neodesafio.net)
 
 Para acessar a documentação interativa da API (Swagger UI) na VPS, utilize a seguinte URL:
 
@@ -66,7 +66,7 @@ A aplicação será iniciada na porta padrão 8080 (ou na porta configurada em `
 
 Após iniciar a aplicação localmente, você pode acessar a documentação interativa da API através do Swagger UI no seguinte endereço:
 
-*   [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+*   [http://localhost:8085/swagger-ui.html](http://localhost:8085/swagger-ui.html)
 
 ## Endpoints Principais
 
