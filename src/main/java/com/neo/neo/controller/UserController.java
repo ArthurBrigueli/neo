@@ -67,9 +67,7 @@ public class UserController {
     }
 
 
-    @Operation(
-            summary = "Buscar usuarios com paginação e filtros de nome, email e cpf (Bearer necessario)"
-    )
+    @Operation(summary = "Buscar usuarios com paginação e filtros de nome, email e cpf (Bearer necessario)")
     @GetMapping("/auth/users")
     public Page<UserResponse> getUsers(@RequestParam(required = false) String email, @RequestParam(required = false) String name, @RequestParam(required = false) String cpf, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
         Specification<User> spec = UserSpecifications.nameContains(name)

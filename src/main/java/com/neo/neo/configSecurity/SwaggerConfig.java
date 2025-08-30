@@ -30,7 +30,7 @@ public class SwaggerConfig {
                                         .bearerFormat("JWT")
                         ))
 
-                .servers(List.of(new Server().url("https://neodesafio.site").description("Servidor principal")));
+                .servers(List.of(new Server().url("http://82.29.57.38:8085").description("Servidor principal")));
     }
 }
 

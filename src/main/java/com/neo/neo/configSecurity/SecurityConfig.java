@@ -1,6 +1,5 @@
 package com.neo.neo.configSecurity;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,13 +33,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
                         .requestMatchers(
-                                "/",
-                                "/swagger-ui.html",
                                 "/swagger-ui/**",
-                                "/v3/api-docs",
+                                "/swagger-ui.html",
                                 "/v3/api-docs/**",
-                                "/v3/api-docs.yaml",
-                                "/swagger-resources",
                                 "/swagger-resources/**",
                                 "/webjars/**"
                         ).permitAll()
