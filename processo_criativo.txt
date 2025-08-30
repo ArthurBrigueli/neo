@@ -62,3 +62,10 @@ Decisões e Desafios
 Melhorias Futuras
 
     Implementação de controle de roles para diferentes níveis de acesso.
+
+Dificuldades
+Adquiri um domínio chamado neodesafio.net e configurei um certificado HTTPS. 
+Durante a configuração do Swagger, surgiram conflitos que impediram seu funcionamento correto. 
+A API em si funcionou normalmente. 
+Para manter a organização e evitar problemas, optei por revogar o certificado e manter a API acessível via HTTP.
+
